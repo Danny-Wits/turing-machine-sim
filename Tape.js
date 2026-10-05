@@ -40,9 +40,7 @@ class Tape {
     let drawX = this.x - (halfVisible * this.cellSize);
     let tapeWidth = visibleCellsCount * this.cellSize;
 
-    stroke("black")
-    line(drawX, this.y, drawX + (visibleCellsCount * this.cellSize), this.y);
-    line(drawX, this.y + this.cellSize, drawX + (visibleCellsCount * this.cellSize), this.y + this.cellSize);
+
 
     for (let i = startIdx; i <= endIdx; i++) {
       let val = this.read(i);

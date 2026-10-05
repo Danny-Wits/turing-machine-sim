@@ -48,7 +48,7 @@ class TuringMachine {
     this.rejectState = "q_reject";
     this.status = "Stopped";
     this.lastActiveEdge = null;
-    this.renderOffsetIndex = 0;
+    this.renderOffsetIndex = 6;
   }
 
   loadProgram(rulesObj, startState = "q0") {
@@ -62,7 +62,7 @@ class TuringMachine {
     this.currentState = this.initialState;
     this.status = "Stopped";
     this.lastActiveEdge = null;
-    this.renderOffsetIndex = 0;
+    this.renderOffsetIndex = 6; // Offset so visible tape starts at -1
   }
 
   step() {
@@ -119,10 +119,13 @@ class TuringMachine {
   draw() {
     let dist = this.head.index - this.renderOffsetIndex;
     
-    // If the head moves too close to the edge of the visible tape, re-center the tape
-    if (Math.abs(dist) >= 6) {
-      this.renderOffsetIndex = this.head.index;
-      dist = 0;
+    // Instead of strict centering, allow the head to roam within a window
+    if (dist > 6) {
+      this.renderOffsetIndex = this.head.index - 6;
+      dist = 6;
+    } else if (dist < -6) {
+      this.renderOffsetIndex = this.head.index + 6;
+      dist = -6;
     }
 
     // Draw the tape centered around the renderOffsetIndex
