@@ -39,15 +39,10 @@ class Tape {
 
     let drawX = this.x - (halfVisible * this.cellSize);
     let tapeWidth = visibleCellsCount * this.cellSize;
-    
-    // Draw thick metal track backing
-    noStroke();
-    // Outer track
-    fill('#dfe6e9');
-    rect(drawX, this.y + this.cellSize * 0.15, tapeWidth, this.cellSize * 0.7, 5);
-    // Inner track (dark groove)
-    fill('#b2bec3');
-    rect(drawX, this.y + this.cellSize * 0.35, tapeWidth, this.cellSize * 0.3);
+
+    stroke("black")
+    line(drawX, this.y, drawX + (visibleCellsCount * this.cellSize), this.y);
+    line(drawX, this.y + this.cellSize, drawX + (visibleCellsCount * this.cellSize), this.y + this.cellSize);
 
     for (let i = startIdx; i <= endIdx; i++) {
       let val = this.read(i);

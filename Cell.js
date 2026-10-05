@@ -9,14 +9,6 @@ class Cell {
   }
 
   draw() {
-    let m = 4; // internal margin
-    let innerSize = this.size - m * 2;
-    
-    // Base drop shadow for a 3D effect
-    noStroke();
-    fill('rgba(0,0,0,0.15)');
-    rect(this.x + m + 3, this.y + m + 4, innerSize, innerSize, 8);
-    
     if (this.highlight === 'red') {
       stroke('#d63031');
       fill('#fab1a0');
@@ -28,19 +20,14 @@ class Cell {
       fill('#74b9ff');
     }
     
-    strokeWeight(2);
-    rect(this.x + m, this.y + m, innerSize, innerSize, 8); 
+    strokeWeight(3);
+    rect(this.x, this.y, this.size, this.size, 10); 
     
-    // Subtle top gloss
     noStroke();
-    fill('rgba(255,255,255,0.4)');
-    rect(this.x + m + 2, this.y + m + 2, innerSize - 4, innerSize * 0.35, 4);
-
-    // Text value
     fill('#2d3436'); 
     textAlign(CENTER, CENTER);
     textStyle(BOLD);
-    textSize(innerSize * 0.6);
+    textSize(this.size * 0.6);
     text(this.val, this.x + this.size / 2, this.y + this.size / 2);
     
     // Draw Tape Index above the cell
