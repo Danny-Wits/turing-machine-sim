@@ -3,7 +3,7 @@ class Tape {
     this.x = x;
     this.y = y;
     this.cellSize = cellSize;
-    this.cells = {}; 
+    this.cells = {};
     this.highlights = {}; // Tracks color trails
     this.blankSymbol = '#';
   }
@@ -38,11 +38,21 @@ class Tape {
     let endIdx = centerIndex + halfVisible;
 
     let drawX = this.x - (halfVisible * this.cellSize);
+    let tapeWidth = visibleCellsCount * this.cellSize;
     
+    // Draw thick metal track backing
+    noStroke();
+    // Outer track
+    fill('#dfe6e9');
+    rect(drawX, this.y + this.cellSize * 0.15, tapeWidth, this.cellSize * 0.7, 5);
+    // Inner track (dark groove)
+    fill('#b2bec3');
+    rect(drawX, this.y + this.cellSize * 0.35, tapeWidth, this.cellSize * 0.3);
+
     for (let i = startIdx; i <= endIdx; i++) {
       let val = this.read(i);
       let hl = this.getHighlight(i);
-      let cell = new Cell(drawX, this.y, this.cellSize, val, hl);
+      let cell = new Cell(drawX, this.y, this.cellSize, val, hl, i);
       cell.draw();
       drawX += this.cellSize;
     }

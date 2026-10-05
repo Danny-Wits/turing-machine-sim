@@ -1,3 +1,42 @@
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTMSound(type) {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  let osc = audioCtx.createOscillator();
+  let gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  let now = audioCtx.currentTime;
+
+  if (type === 'write') {
+    // A high-pitched, short computer-y beep
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    osc.start(now);
+    osc.stop(now + 0.05);
+  } else if (type === 'move') {
+    // A low, mechanical click/thud
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.03);
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+    osc.start(now);
+    osc.stop(now + 0.03);
+  } else if (type === 'read') {
+    // Subtle tick for reading unchanged
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, now);
+    gain.gain.setValueAtTime(0.02, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+    osc.start(now);
+    osc.stop(now + 0.02);
+  }
+}
+
 class TuringMachine {
   constructor(tape, head) {
     this.tape = tape;
@@ -51,14 +90,22 @@ class TuringMachine {
     this.tape.highlights = {};
     if (writeSym !== readSym) {
       this.tape.setHighlight(this.head.index, 'red');
+      playTMSound('write');
     } else {
       this.tape.setHighlight(this.head.index, 'green');
+      playTMSound('read');
     }
 
     this.tape.write(this.head.index, writeSym);
 
-    if (action.move === 'R') this.head.moveRight();
-    else if (action.move === 'L') this.head.moveLeft();
+    // Play move sound slightly after write/read so they don't overlap as heavily
+    if (action.move === 'R') {
+      this.head.moveRight();
+      setTimeout(() => playTMSound('move'), 40);
+    } else if (action.move === 'L') {
+      this.head.moveLeft();
+      setTimeout(() => playTMSound('move'), 40);
+    }
 
     this.currentState = action.nextState;
 
