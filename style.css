@@ -10,9 +10,15 @@ body {
 }
 h1 {
     margin-top: 20px;
-    font-size: 32px;
+    font-size: 38px;
     color: #6c5ce7;
-    text-shadow: 2px 2px 0px #dfe6e9;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 0px #dfe6e9;
+}
+.bracket {
+    color: #00cec9;
 }
 #canvas-container {
     box-shadow: 0 8px 16px rgba(108, 92, 231, 0.15);
