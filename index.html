@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Turing Machine Simulator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Turing Machine Simulator</h1>
+
+    <!-- Top: Canvas and IO -->
+    <div class="top-row">
+      <div id="canvas-container"></div>
+      <div id="io-col" class="io-col"></div>
+    </div>
+
+    <!-- Middle: Programming Rules -->
+    <div class="middle-row">
+      <div id="prog-module" style="flex-grow: 1;"></div>
+    </div>
+
+    <!-- Diagram is now inside canvas-container -->
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 20px; margin-bottom: 20px; color: #636e72; font-size: 14px;">
+      Created by <a href="https://github.com/dannywits" target="_blank" style="color: #0984e3; text-decoration: none; font-weight: bold;">dannywits</a>
+    </div>
+
+    <script src="Cell.js"></script>
+    <script src="Tape.js"></script>
+    <script src="Head.js"></script>
+    <script src="TuringMachine.js"></script>
+    <script src="InputModule.js"></script>
+    <script src="OutputModule.js"></script>
+    <script src="StateDiagramModule.js"></script>
+    <script src="StorageModule.js"></script>
+    <script src="ProgrammingModule.js"></script>
+    <script src="sketch.js"></script>
+</body>
+</html>
