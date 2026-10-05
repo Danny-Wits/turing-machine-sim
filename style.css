@@ -164,3 +164,34 @@ button:active {
 ::-webkit-scrollbar-thumb:hover {
     background: #b2bec3;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    .top-row, .middle-row, .bottom-row {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    #canvas-container {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: auto;
+    }
+
+    .module {
+        min-width: 100% !important;
+        overflow-x: auto;
+    }
+
+    h1 {
+        font-size: 24px;
+        text-align: center;
+        margin: 15px 10px;
+    }
+    
+    .io-col {
+        width: 100%;
+    }
+}
