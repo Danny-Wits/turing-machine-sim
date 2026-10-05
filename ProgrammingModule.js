@@ -23,8 +23,22 @@ class ProgrammingModule {
     title.parent(titleRow);
     title.style('margin', '0');
 
+    let btnsDiv = createDiv('');
+    btnsDiv.style('display', 'flex');
+    btnsDiv.style('gap', '10px');
+    btnsDiv.parent(titleRow);
+
+    this.normalizeBtn = createButton('Auto-Rename States');
+    this.normalizeBtn.parent(btnsDiv);
+    this.normalizeBtn.style('background', '#a29bfe');
+    this.normalizeBtn.style('color', '#fff');
+    this.normalizeBtn.style('font-size', '12px');
+    this.normalizeBtn.style('padding', '4px 8px');
+    this.normalizeBtn.attribute('title', 'Rename all states to q0, q1, q2...');
+    this.normalizeBtn.mousePressed(() => this.normalizeStates());
+
     this.toggleBtn = createButton('Switch to Text Mode');
-    this.toggleBtn.parent(titleRow);
+    this.toggleBtn.parent(btnsDiv);
     this.toggleBtn.style('background', '#74b9ff');
     this.toggleBtn.style('color', '#fff');
     this.toggleBtn.style('font-size', '12px');
@@ -298,5 +312,38 @@ class ProgrammingModule {
     if(this.diagramMod) {
       this.diagramMod.update(rules);
     }
+  }
+
+  normalizeStates() {
+    if (this.isTextMode) this.toggleMode(); // Ensure we are modifying GUI
+
+    let stateMap = {};
+    let nextId = 0;
+    
+    let mapState = (s) => {
+      s = s.trim();
+      if (!s) return s;
+      if (s === 'q_accept' || s === 'q_reject') return s;
+      if (stateMap[s] === undefined) {
+        stateMap[s] = 'q' + nextId;
+        nextId++;
+      }
+      return stateMap[s];
+    };
+
+    if (this.rows.length > 0) {
+      let firstState = this.rows[0].stateIn.value().trim();
+      if (firstState && firstState !== 'q_accept' && firstState !== 'q_reject') {
+        stateMap[firstState] = 'q0';
+        nextId = 1;
+      }
+    }
+
+    for (let r of this.rows) {
+      r.stateIn.value(mapState(r.stateIn.value()));
+      r.nextStateIn.value(mapState(r.nextStateIn.value()));
+    }
+
+    this.compile();
   }
 }

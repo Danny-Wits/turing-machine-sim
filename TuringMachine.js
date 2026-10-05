@@ -49,6 +49,7 @@ class TuringMachine {
     this.status = "Stopped";
     this.lastActiveEdge = null;
     this.renderOffsetIndex = 6;
+    this.onLog = null;
   }
 
   loadProgram(rulesObj, startState = "q0") {
@@ -72,6 +73,7 @@ class TuringMachine {
     }
 
     let readSym = this.tape.read(this.head.index);
+    let prevState = this.currentState;
     let ruleKey = `${this.currentState},${readSym}`;
     let action = this.rules[ruleKey];
 
@@ -79,14 +81,19 @@ class TuringMachine {
       action = this.rules[`${this.currentState},*`];
       if (!action) {
         this.status = "Halted (Reject - No Rule)";
+        if (this.onLog) this.onLog(`Halted (Reject): No rule for [${prevState}] reading '${readSym}'`);
         this.lastActiveEdge = null;
         return;
       }
     }
 
     this.lastActiveEdge = `${this.currentState}->${action.nextState}`;
-
     let writeSym = action.write === '*' ? readSym : action.write;
+    
+    if (this.onLog) {
+      this.onLog(`[${prevState}] read '${readSym}' ➔ write '${writeSym}', move ${action.move}, goto [${action.nextState}]`);
+    }
+
     this.tape.highlights = {};
     if (writeSym !== readSym) {
       this.tape.setHighlight(this.head.index, 'red');
@@ -111,8 +118,10 @@ class TuringMachine {
 
     if (this.currentState === this.acceptState) {
       this.status = "Halted (Accept)";
+      if (this.onLog) this.onLog(`Halted (Accept): Reached accept state.`);
     } else if (this.currentState === this.rejectState) {
       this.status = "Halted (Reject)";
+      if (this.onLog) this.onLog(`Halted (Reject): Reached reject state.`);
     }
   }
 

@@ -7,6 +7,7 @@ let outputMod;
 let progMod;
 let diagramMod;
 let storageMod;
+let logMod;
 
 let lastRunTime = 0;
 let runInterval = 250;
@@ -31,6 +32,12 @@ function setup() {
   diagramMod = new StateDiagramModule('canvas-container');
   progMod = new ProgrammingModule('prog-module', tm, diagramMod);
   storageMod = new StorageModule('io-col', tm, progMod, inputMod);
+  logMod = new LogModule('log-module');
+
+  // Link logging
+  tm.onLog = (msg) => {
+    logMod.log(msg);
+  };
 
   // Try to load autosaved state, otherwise load default
   if (!storageMod.autoLoad()) {
