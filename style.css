@@ -178,6 +178,7 @@ button:active {
         width: 100%;
         max-width: 100vw;
         overflow-x: auto;
+        align-items: flex-start; /* Fixes center alignment cutting off scrollable left edge */
     }
 
     .module {
